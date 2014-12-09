@@ -1,0 +1,59 @@
+#!/usr/bin/env python
+import rospy
+
+from std_msgs.msg import Bool, Byte
+
+import socket
+import select
+import struct
+
+import time
+
+tcp_ip = "192.168.0.3"
+TCP_PORT = 10001
+
+def send_level(channel, level):
+	command = "C%03dL%03d\n" % (channel, level)
+	print command
+	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # TCP
+        sock.connect((tcp_ip, TCP_PORT))
+        sock.send(command)
+        sock.close()
+
+def switch_light(channel, state):
+	if(state==True):
+		send_level(channel, 255)
+	else:
+		send_level(channel, 0)
+
+def callback1(msg):
+	switch_light(0,msg.data)
+
+def callback2(msg):
+	switch_light(1,msg.data)
+
+def callback3(msg):
+	switch_light(2,msg.data)
+
+def callback4(msg):
+	switch_light(3,msg.data)
+
+def listener():
+	rospy.init_node('heros_lights', anonymous=True)
+	tcp_ip = rospy.get_param('host', '192.168.0.3')
+	
+	rospy.Subscriber("/lights/light1", Bool, callback1)
+	rospy.Subscriber("/lights/light2", Bool, callback2)
+	rospy.Subscriber("/lights/light3", Bool, callback3)
+	rospy.Subscriber("/lights/light4", Bool, callback4)
+	
+	rospy.spin()
+
+if __name__ == '__main__':
+	
+	try:
+		listener()
+
+	except rospy.ROSInterruptException:
+		pass
+
