@@ -1,9 +1,0 @@
-ros-indigo-innok-heros-lights (1.0.0-0trusty) trusty; urgency=high
-
-  * first version tested on hardware
-  * Initial commit
-  * Contributors: Alwin Heerklotz
-
- -- Alwin Heerklotz <ah@innok-robotics.de>  Mon, 08 Dec 2014 23:00:00 -0000
-
-
